@@ -6,8 +6,8 @@ metadata:
     app: kr8sswordz
 spec:
   ports:
-    - port: 80
-      targetPort: 3002
+  - port: 80
+    targetPort: 3002
   selector:
     app: kr8sswordz
     tier: kr8sswordz
@@ -30,7 +30,7 @@ spec:
         tier: kr8sswordz
     spec:
       containers:
-      - image: 127.0.0.1:30400/kr8sswordz:latest
+      - image: 127.0.0.1:30400/kr8sswordz:$BUILD_TAG
         name: kr8sswordz
         imagePullPolicy: Always
         ports:
@@ -40,7 +40,7 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
- name: kr8sswordz
+  name: kr8sswordz
 spec:
   backend:
     serviceName: kr8sswordz

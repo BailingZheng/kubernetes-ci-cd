@@ -6,14 +6,15 @@ metadata:
     app: monitor-scale
 spec:
   ports:
-    - port: 3001
-      targetPort: 3001
+  - port: 3001
+    targetPort: 3001
   selector:
     app: monitor-scale
     tier: monitor-scale
   type: NodePort
 
 ---
+
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -29,8 +30,9 @@ spec:
         app: monitor-scale
         tier: monitor-scale
     spec:
+      serviceAccountName: monitor-scale
       containers:
-      - image: 127.0.0.1:30400/monitor-scale:latest
+      - image: 127.0.0.1:30400/monitor-scale:$BUILD_TAG
         name: monitor-scale
         imagePullPolicy: Always
         ports:
@@ -41,15 +43,16 @@ spec:
         args: ["proxy","-p","2345"]
         ports:
         - containerPort: 2345
-          name: kubectl-api          
+          name: kubectl-api
 
 ---
+
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
- name: monitor-scale
- annotations:
-  ingress.kubernetes.io/rewrite-target: /
+  name: monitor-scale
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
 spec:
   backend:
     serviceName: monitor-scale
